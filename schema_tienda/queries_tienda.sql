@@ -18,17 +18,24 @@ SELECT * FROM fabricante WHERE codigo>=4 LIMIT 2;
 SELECT nombre, precio FROM producto ORDER BY precio ASC LIMIT 1;
 SELECT nombre, precio FROM producto ORDER BY precio DESC LIMIT 1;
 SELECT nombre FROM producto WHERE codigo_fabricante = 2;
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo;
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo ORDER BY fabricante.nombre ASC;
-SELECT producto.codigo, producto.nombre, producto.codigo_fabricante, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo;
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo ORDER BY producto.precio ASC LIMIT 1;
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo ORDER BY producto.precio DESC LIMIT 1;
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo;
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo ORDER BY fabricante.nombre ASC;
+SELECT producto.codigo, producto.nombre, producto.codigo_fabricante, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo;
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo ORDER BY producto.precio ASC LIMIT 1;
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo ORDER BY producto.precio DESC LIMIT 1;
+SELECT producto.nombre, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "lenovo";
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "crucial" && producto.precio > 200;
+SELECT producto.nombre, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE (fabricante.nombre = "Asus") || (fabricante.nombre = "Hewlett-Packard") || (fabricante.nombre = "Seagate");
+SELECT producto.nombre, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre IN ("Asus", "Hewlett-Packard", "Seagate");
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE RIGHT(fabricante.nombre,1) = "e";
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre LIKE('%w%');
+SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE producto.precio >= 180 ORDER BY producto.precio DESC, producto.nombre ASC;
+SELECT DISTINCT fabricante.codigo, fabricante.nombre FROM fabricante JOIN producto ON producto.codigo_fabricante = fabricante.codigo;
+SELECT fabricante.nombre, producto.nombre AS nombre_producto FROM fabricante LEFT JOIN producto ON producto.codigo_fabricante = fabricante.codigo;
+SELECT fabricante.nombre, producto.nombre AS nombre_producto FROM fabricante LEFT JOIN producto ON producto.codigo_fabricante = fabricante.codigo WHERE producto.nombre IS NULL;
 SELECT producto.nombre, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "lenovo";
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "crucial" && producto.precio > 200;
-SELECT producto.nombre, fabricante.nombre FROM producto, fabricante WHERE (producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "Asus") || (producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "Hewlett-Packard") || (producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "Seagate");
-SELECT producto.nombre, fabricante.nombre FROM producto, fabricante WHERE (producto.codigo_fabricante = fabricante.codigo && fabricante.nombre IN ("Asus", "Hewlett-Packard", "Seagate"));
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo && RIGHT(fabricante.nombre,1) = "e";
-SELECT producto.nombre, producto.precio, fabricante.nombre FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo && fabricante.nombre LIKE('%w%');
-
-
-
+SELECT * FROM producto WHERE producto.precio = (SELECT producto.precio FROM producto, fabricante WHERE producto.codigo_fabricante = fabricante.codigo && fabricante.nombre = "lenovo" ORDER BY producto.precio DESC LIMIT 1);
+SELECT producto.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "lenovo" ORDER BY producto.precio DESC LIMIT 1;
+SELECT producto.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "Hewlett-Packard" ORDER BY producto.precio ASC LIMIT 1;
+SELECT producto.nombre FROM producto WHERE producto.precio >= (SELECT producto.precio FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "lenovo" ORDER BY producto.precio DESC LIMIT 1);
+SELECT producto.nombre FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "Asus" && producto.precio > (SELECT AVG(precio) FROM producto JOIN fabricante ON producto.codigo_fabricante = fabricante.codigo WHERE fabricante.nombre = "Asus");
