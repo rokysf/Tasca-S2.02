@@ -1,0 +1,9 @@
+SELECT persona.apellido1, persona.apellido2, persona.nombre FROM persona WHERE tipo = "alumno" ORDER BY persona.apellido1 ASC, persona.apellido2 ASC, persona.nombre ASC;
+SELECT persona.nombre, persona.apellido1, persona.apellido2 FROM persona WHERE tipo = "alumno" && persona.telefono IS NULL;
+SELECT persona.nombre, persona.apellido1, persona.apellido2 FROM persona WHERE tipo = "alumno" && persona.fecha_nacimiento LIKE ('%1999%');
+SELECT persona.nombre, persona.apellido1, persona.apellido2 FROM persona WHERE tipo = "profesor" && persona.telefono IS NULL && persona.nif LIKE ('%K');
+SELECT asignatura.nombre FROM asignatura WHERE asignatura.cuatrimestre = 1 && asignatura.curso = 3 && asignatura.id_grado = 7;
+SELECT persona.apellido1, persona.apellido2, persona.nombre, departamento.nombre FROM persona JOIN profesor ON persona.id = profesor.id_profesor JOIN departamento ON profesor.id_departamento = departamento.id;
+SELECT asignatura.nombre, curso_escolar.anyo_inicio, curso_escolar.anyo_fin FROM asignatura JOIN alumno_se_matricula_asignatura ON asignatura.id = alumno_se_matricula_asignatura.id_asignatura JOIN curso_escolar ON curso_escolar.id = alumno_se_matricula_asignatura.id_curso_escolar JOIN persona ON persona.id = alumno_se_matricula_asignatura.id_alumno WHERE persona.nif = "26902806M";
+SELECT DISTINCT departamento.nombre FROM departamento JOIN profesor ON departamento.id = profesor.id_departamento JOIN asignatura WHERE id_grado = 4;
+SELECT DISTINCT persona.nombre, persona.apellido1, persona.apellido2 FROM persona JOIN alumno_se_matricula_asignatura ON persona.id = alumno_se_matricula_asignatura.id_alumno JOIN curso_escolar ON alumno_se_matricula_asignatura.id_curso_escolar = curso_escolar.id WHERE curso_escolar.anyo_inicio = 2018 && curso_escolar.anyo_fin = 2019;

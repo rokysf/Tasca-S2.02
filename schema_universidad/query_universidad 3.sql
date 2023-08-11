@@ -1,0 +1,11 @@
+SELECT COUNT(persona.id) FROM persona WHERE persona.tipo = "alumno";
+SELECT COUNT(persona.id) FROM persona WHERE persona.tipo = "alumno" && persona.fecha_nacimiento LIKE('%1999%');
+SELECT departamento.nombre, COUNT(id_profesor) AS número_profesores FROM profesor JOIN departamento ON profesor.id_departamento = departamento.id GROUP BY departamento.nombre ORDER BY número_profesores DESC;
+SELECT departamento.nombre, COUNT(id_profesor) AS número_profesores FROM profesor RIGHT JOIN departamento ON profesor.id_departamento = departamento.id GROUP BY departamento.nombre ORDER BY número_profesores DESC;
+SELECT grado.nombre, COUNT(asignatura.id) AS número_asignaturas FROM grado LEFT JOIN asignatura ON grado.id = asignatura.id_grado GROUP BY grado.nombre ORDER BY número_asignaturas DESC;
+SELECT grado.nombre, COUNT(asignatura.id) AS número_asignaturas FROM grado JOIN asignatura ON grado.id = asignatura.id_grado GROUP BY grado.nombre HAVING número_asignaturas > 40;
+SELECT grado.nombre, asignatura.tipo, SUM(asignatura.creditos) AS suma_creditos_asignatura FROM grado JOIN asignatura ON grado.id = asignatura.id_grado GROUP BY grado.nombre, asignatura.tipo;
+SELECT curso_escolar.anyo_inicio, COUNT(persona.id) AS número_alumnos_matriculados FROM curso_escolar LEFT JOIN alumno_se_matricula_asignatura ON curso_escolar.id = alumno_se_matricula_asignatura.id_curso_escolar LEFT JOIN persona ON alumno_se_matricula_asignatura.id_alumno = persona.id GROUP BY curso_escolar.anyo_inicio;
+SELECT profesor.id_profesor, persona.nombre, persona.apellido1, persona.apellido2, COUNT(asignatura.id) AS número_asignaturas FROM profesor JOIN persona ON profesor.id_profesor = persona.id LEFT JOIN asignatura ON profesor.id_profesor = asignatura.id_profesor GROUP BY profesor.id_profesor ORDER BY número_asignaturas DESC;
+SELECT * FROM persona WHERE persona.tipo = "alumno" && persona.fecha_nacimiento = (SELECT MAX(persona.fecha_nacimiento) FROM persona);
+SELECT persona.nombre, persona.apellido1, persona.apellido2 FROM persona JOIN profesor ON persona.id = profesor.id_profesor JOIN departamento ON profesor.id_departamento = departamento.id LEFT JOIN asignatura ON profesor.id_profesor = asignatura.id_profesor WHERE asignatura.id_profesor IS NULL;
